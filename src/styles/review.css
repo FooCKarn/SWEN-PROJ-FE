@@ -1,0 +1,248 @@
+/* ── Review Modal ── */
+.review-modal-inner {
+  max-width: 520px;
+  width: 90%;
+  text-align: left;
+  padding: 28px 28px 24px;
+}
+
+.review-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.review-modal-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: .82rem;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.review-modal-meta .meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.review-modal-meta .meta-user {
+  background: #FFF0EC;
+  color: var(--accent);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-weight: 500;
+}
+
+.review-textarea-wrap {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.review-textarea {
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--input-bg);
+  padding: 14px 16px 30px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .88rem;
+  color: var(--text);
+  line-height: 1.6;
+  transition: border-color .2s;
+  outline: none;
+}
+
+.review-textarea:focus {
+  border-color: var(--accent);
+}
+
+.review-textarea::placeholder {
+  color: var(--muted);
+  font-style: normal;
+}
+
+.textarea-limit {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-size: .72rem;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* ── Star Rating Input ── */
+.star-rating-input {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  transition: transform .15s;
+  line-height: 1;
+}
+
+.star-btn:hover { transform: scale(1.2); }
+
+.star-btn svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* ── Star Display (read-only) ── */
+.star-display {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.star-display svg {
+  width: 20px;
+  height: 20px;
+}
+
+.star-display.sm svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Review Feed ── */
+.reviews-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.review-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  animation: fadeUp .4s ease both;
+}
+
+.review-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.review-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.review-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.review-card-title {
+  font-weight: 600;
+  font-size: .97rem;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.review-card-comment {
+  font-size: .85rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.review-card-rating {
+  display: flex;
+  align-items: center;
+}
+
+.btn-review-edit,
+.btn-review-delete {
+  font-size: .79rem;
+  font-weight: 500;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.btn-review-edit:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.btn-review-delete {
+  color: #A02020;
+  border-color: #A02020;
+}
+
+.btn-review-delete:hover {
+  background: #A02020;
+  color: #fff;
+}
+
+/* ── Load More ── */
+.load-more-btn {
+  display: block;
+  margin: 20px auto 0;
+  padding: 11px 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .84rem;
+  font-weight: 600;
+  background: var(--text);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+
+.load-more-btn:hover {
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+.load-more-btn:disabled {
+  opacity: .5;
+  pointer-events: none;
+}
+
+/* ── No Reviews Placeholder ── */
+.no-reviews-placeholder {
+  text-align: center;
+  padding: 64px 24px;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  color: #C4BDB8;
+  letter-spacing: .01em;
+}
+
+/* ── Review skeleton ── */
+.review-skeleton {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

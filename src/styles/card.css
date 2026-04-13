@@ -65,3 +65,19 @@
   .booking-card    { flex-direction: column; align-items: flex-start; }
   .booking-actions { width: 100%; justify-content: flex-end; }
 }
+.btn-review-company {
+  font-size: .79rem; font-weight: 500; color: var(--muted); background: none;
+  border: 1px solid var(--border); border-radius: 8px; padding: 7px 13px;
+  cursor: pointer; transition: all .2s;
+  font-family: 'DM Sans', sans-serif; white-space: nowrap;
+}
+.btn-review-company:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-delete-review {
+  border-color: #C04040 !important;
+  color: #C04040 !important;
+}
+.btn-delete-review:hover {
+  background: #C04040 !important;
+  color: #fff !important;
+}

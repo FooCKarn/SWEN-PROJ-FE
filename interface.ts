@@ -18,6 +18,23 @@ export interface CompanyItem {
   website?: string;
   description?: string;
   telephone_number?: string;
+  averageRating?: number;
+  numReviews?: number;
+}
+
+export interface ReviewItem {
+  _id: string;
+  rating: number;
+  comment: string;
+  company: string | CompanyItem;
+  user: { _id: string; name: string } | string;
+  createdAt: string;
+}
+
+export interface ReviewJson {
+  success: boolean;
+  count?: number;
+  data: ReviewItem[];
 }
 
 export interface BookingItem {
@@ -58,6 +75,8 @@ export interface CardProps {
   onEdit:   (booking: BookingItem) => void;
   onCancel: (booking: BookingItem) => void;
   onDetail: (booking: BookingItem) => void;
+  userReview?: ReviewItem | null;
+  onDeleteReview?: (booking: BookingItem, review: ReviewItem) => void;
 }
 
 export interface DateReserveProps {

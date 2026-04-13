@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { CompanyItem, BookingItem } from '../../interface';
 import { formatDate } from '../utils/dateFormat';
 
@@ -21,13 +22,14 @@ export default function CompanyCard({
       className={`company-card${booked ? ' is-booked' : ''}`}
       style={{ animationDelay: `${index * 0.04}s` }}
     >
-      <div className="company-top">
+      {/* Clickable header → Company Profile */}
+      <Link href={`/company/${company._id}`} className="company-top company-top-link">
         <div className="company-logo">🏢</div>
         <div>
           <div className="company-name">{company.name}</div>
           <div className="company-sub">{company.address}</div>
         </div>
-      </div>
+      </Link>
 
       {company.description && (
         <p className="company-desc">

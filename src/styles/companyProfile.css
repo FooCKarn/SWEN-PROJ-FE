@@ -1,0 +1,161 @@
+/* ── Company Profile Page ── */
+.company-profile-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+/* ── Company Header ── */
+.company-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  margin-bottom: 32px;
+}
+
+.company-logo-box {
+  width: 200px;
+  height: 200px;
+  min-width: 200px;
+  background: #EFECE8;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+}
+
+.company-logo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.company-logo-placeholder {
+  font-size: 2.5rem;
+  opacity: .35;
+}
+
+.company-header-info {
+  flex: 1;
+  padding-top: 4px;
+}
+
+.company-header-info h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.company-header-address {
+  font-size: .88rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.company-header-desc {
+  font-size: .88rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+/* ── Rating Summary ── */
+.company-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.company-rating-text {
+  font-size: .88rem;
+  color: var(--muted);
+}
+
+.company-rating-text strong {
+  color: var(--text);
+}
+
+/* ── Action Buttons ── */
+.company-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-review-now {
+  font-family: 'DM Sans', sans-serif;
+  font-size: .84rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: background .2s, box-shadow .2s, transform .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-review-now:hover {
+  background: #A83820;
+  box-shadow: 0 4px 16px rgba(200,80,42,.28);
+  transform: translateY(-1px);
+}
+
+.btn-book-now {
+  font-family: 'DM Sans', sans-serif;
+  font-size: .84rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--text);
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.btn-book-now:hover {
+  background: #2e2522;
+  transform: translateY(-1px);
+}
+
+.btn-book-now.disabled {
+  opacity: .45;
+  pointer-events: none;
+}
+
+/* ── Reviews Section ── */
+.reviews-section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem;
+  color: var(--text);
+  margin-bottom: 14px;
+  padding-top: 4px;
+}
+
+@media (max-width: 680px) {
+  .company-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .company-logo-box {
+    width: 100%;
+    height: 180px;
+    min-width: unset;
+  }
+  .company-profile-page {
+    padding: 24px 16px 48px;
+  }
+}

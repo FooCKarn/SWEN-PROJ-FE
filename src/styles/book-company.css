@@ -129,3 +129,17 @@
 }
 .btn-edit-small:hover   { border-color: var(--accent); color: var(--accent); }
 .btn-cancel-small:hover { border-color: var(--accent); color: var(--accent); }
+/* Company top as link */
+.company-top-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 8px;
+  margin: -6px -6px 0;
+  padding: 6px 6px 0;
+  transition: background .18s;
+}
+.company-top-link:hover { background: var(--accent-light); }
+.company-top-link:hover .company-name { color: var(--accent); }

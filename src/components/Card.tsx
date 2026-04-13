@@ -1,15 +1,23 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { CardProps } from '../../interface';
 import { formatDate } from '../utils/dateFormat';
 import '@/styles/card.css';
 
-export default function Card({ booking, index, onEdit, onCancel, onDetail }: CardProps) {
+export default function Card({ booking, index, onEdit, onCancel, onDetail, onDeleteReview, userReview }: CardProps) {
+  const router  = useRouter();
   const company = booking.company;
   const website = company?.website || '';
   const websiteHref = website
     ? website.startsWith('http') ? website : `https://${website}`
     : '#';
+
+  const isPast = booking.bookingDate ? new Date(booking.bookingDate) < new Date() : false;
+
+  function goToCompanyProfile() {
+    router.push(`/company/${company._id}`);
+  }
 
   return (
     <div className="booking-card" style={{ animationDelay: `${index * 0.07}s` }}>
@@ -37,7 +45,7 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail }: Car
               </span>
             )}
 
-            <button className="meta-tag meta-date" onClick={() => onEdit(booking)}>
+            <button className="meta-tag meta-date" onClick={() => !isPast && onEdit(booking)}>
               <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <rect x="3" y="4" width="18" height="18" rx="2" />
                 <line x1="16" y1="2" x2="16" y2="6" />
@@ -45,7 +53,7 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail }: Car
                 <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
               {formatDate(booking.bookingDate)}
-              <span className="edit-hint">✏️</span>
+              {!isPast && <span className="edit-hint">✏️</span>}
             </button>
 
             {company?.address && (
@@ -63,7 +71,7 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail }: Car
                 <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10" />
                   <line x1="2" y1="12" x2="22" y2="12" />
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z" />
                 </svg>
                 <a href={websiteHref} target="_blank" rel="noopener noreferrer">{website}</a>
               </span>
@@ -73,8 +81,20 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail }: Car
       </div>
 
       <div className="booking-actions">
-        <button className="btn-edit-date" onClick={() => onEdit(booking)}>✏️ Edit Date</button>
-        <button className="btn-cancel"    onClick={() => onCancel(booking)}>Cancel</button>
+        {!isPast ? (
+          <>
+            <button className="btn-edit-date" onClick={() => onEdit(booking)}>✏️ Edit Date</button>
+            <button className="btn-cancel"    onClick={() => onCancel(booking)}>Cancel</button>
+          </>
+        ) : userReview ? (
+          <>
+            <button className="btn-edit-date" onClick={goToCompanyProfile}>✏️ Edit Review</button>
+            <button className="btn-cancel btn-delete-review"
+              onClick={() => onDeleteReview?.(booking, userReview)}>Delete Review</button>
+          </>
+        ) : (
+          <button className="btn-review-company" onClick={goToCompanyProfile}>Review Company</button>
+        )}
       </div>
     </div>
   );

@@ -13,10 +13,12 @@ import Toast       from './Toast';
 import getBookings   from '../libs/getBookings';
 import updateBooking from '../libs/updateBooking';
 import deleteBooking from '../libs/deleteBooking';
+import getReviews    from '../libs/getReviews';
+import deleteReview  from '../libs/deleteReview';
 
 import { setBookings, removeBooking, updateBookingDate } from '../redux/features/bookSlice';
 import { RootState } from '../redux/store';
-import { BookingItem } from '../../interface';
+import { BookingItem, ReviewItem } from '../../interface';
 import { formatDate } from '../utils/dateFormat';
 import { useToast } from '../hooks/useToast';
 
@@ -38,7 +40,11 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
   const [editLoading,   setEditLoading]   = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
 
-  // ── GET /api/v1/bookings → dispatch to Redux store
+  // ── Review state: companyId → ReviewItem | null
+  const [reviewMap, setReviewMap] = useState<Record<string, ReviewItem | null>>({});
+  const [deleteReviewTarget, setDeleteReviewTarget] = useState<{ booking: BookingItem; review: ReviewItem } | null>(null);
+  const [deleteReviewLoading, setDeleteReviewLoading] = useState(false);
+
   const loadBookings = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -55,7 +61,34 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
 
   useEffect(() => { loadBookings(); }, [loadBookings]);
 
-  // ── Open edit modal — parse ISO → date + time
+  // ── After bookings load, fetch reviews for past bookings
+  useEffect(() => {
+    if (loading || bookings.length === 0) return;
+
+    const userId = (() => {
+      try { return JSON.parse(localStorage.getItem('jf_user') || '{}')._id || ''; }
+      catch { return ''; }
+    })();
+    if (!userId) return;
+
+    const pastBookings = bookings.filter(b => b.bookingDate && new Date(b.bookingDate) < new Date());
+    const uniqueCompanyIds = [...new Set(pastBookings.map(b => b.company._id))];
+
+    uniqueCompanyIds.forEach(async (companyId) => {
+      try {
+        const res = await getReviews(companyId);
+        const userReview = res.data?.find(r => {
+          const uid = typeof r.user === 'object' ? r.user._id : r.user;
+          return uid === userId;
+        }) ?? null;
+        setReviewMap(prev => ({ ...prev, [companyId]: userReview }));
+      } catch {
+        setReviewMap(prev => ({ ...prev, [companyId]: null }));
+      }
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
+
   function openEditModal(booking: BookingItem) {
     setEditTarget(booking);
     const iso = booking.bookingDate || '';
@@ -63,7 +96,6 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
     setEditTime(iso.length > 10 ? iso.slice(11, 16) : '09:00');
   }
 
-  // ── PUT /api/v1/bookings/:id
   async function confirmEdit() {
     if (!editTarget) return;
     const [y, m, d] = editDate.split('-').map(Number);
@@ -94,7 +126,6 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
     }
   }
 
-  // ── DELETE /api/v1/bookings/:id
   async function confirmCancel() {
     if (!cancelTarget) return;
     setCancelLoading(true);
@@ -112,7 +143,24 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
     }
   }
 
-  // ── Skeleton
+  async function confirmDeleteReview() {
+    if (!deleteReviewTarget) return;
+    setDeleteReviewLoading(true);
+    try {
+      const token = localStorage.getItem('jf_token') || '';
+      await deleteReview(token, deleteReviewTarget.review._id);
+      const companyId = deleteReviewTarget.booking.company._id;
+      setReviewMap(prev => ({ ...prev, [companyId]: null }));
+      setDeleteReviewTarget(null);
+      showToast('✅ Review deleted.', 'success');
+    } catch (err: unknown) {
+      showToast(`❌ ${err instanceof Error ? err.message : 'Delete failed'}`, 'error');
+      setDeleteReviewTarget(null);
+    } finally {
+      setDeleteReviewLoading(false);
+    }
+  }
+
   if (loading) return (
     <div className="bookings-list">
       {[0, 1].map((i) => (
@@ -125,7 +173,6 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
     </div>
   );
 
-  // ── Error
   if (error) return (
     <EmptyState
       icon="⚠️"
@@ -135,7 +182,6 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
     />
   );
 
-  // ── Empty
   if (bookings.length === 0) return (
     <EmptyState
       icon="📋"
@@ -147,7 +193,6 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
 
   return (
     <>
-      {/* ── Booking Cards */}
       <div className="bookings-list">
         {bookings.map((booking, i) => (
           <Card
@@ -157,11 +202,12 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
             onEdit={openEditModal}
             onCancel={(b) => setCancelTarget(b)}
             onDetail={(b) => setDetailTarget(b)}
+            userReview={reviewMap[booking.company._id] ?? null}
+            onDeleteReview={(b, r) => setDeleteReviewTarget({ booking: b, review: r })}
           />
         ))}
       </div>
 
-      {/* ── Modals */}
       {editTarget && (
         <EditModal
           target={editTarget}
@@ -189,7 +235,23 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
         />
       )}
 
-      {/* ── Toast */}
+      {deleteReviewTarget && (
+        <div className="modal-overlay open"
+          onClick={(e) => { if (e.target === e.currentTarget) setDeleteReviewTarget(null); }}>
+          <div className="modal" style={{ maxWidth: 380 }}>
+            <div className="modal-icon">🗑️</div>
+            <h3>Delete Review</h3>
+            <p>Are you sure you want to delete your review for <strong>{deleteReviewTarget.booking.company.name}</strong>?</p>
+            <div className="modal-actions">
+              <button className="btn-modal-cancel" onClick={() => setDeleteReviewTarget(null)}>Cancel</button>
+              <button className="btn-modal-confirm" onClick={confirmDeleteReview} disabled={deleteReviewLoading}>
+                {deleteReviewLoading ? 'Deleting…' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Toast toast={toast} />
     </>
   );
