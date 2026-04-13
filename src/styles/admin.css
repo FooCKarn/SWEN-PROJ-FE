@@ -295,86 +295,155 @@
 }
 .badge-clear:hover { opacity: 1; }
 
-/* Review list card (admin view – read-only) */
-.admin-review-card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px 22px;
-  animation: fadeUp .4s ease both;
+/* ═══════════════════════════════════════════
+   ADMIN REVIEWS - FIGMA STYLE
+   ═══════════════════════════════════════════ */
+
+
+
+/* ── Stats & Header ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
 }
 
-.admin-review-card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  gap: 12px;
-  flex-wrap: wrap;
+.stat-card {
+  background: #FFFFFF;
+  border: 1px solid #E0DAD4;
+  border-radius: 12px;
+  padding: 24px;
 }
 
+/* ── Meta & User Badge (Fixed Long Background) ── */
 .admin-review-meta {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  font-size: .8rem;
-  color: var(--muted);
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.meta-tag.meta-user {
+  display: inline-flex;    /* บังคับให้พื้นหลังหดเท่าเนื้อหา */
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  height: 24px;
+  background: #DFFFDA;     /* สีเขียวตาม Figma */
+  color: #138F00;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  
+  /* ป้องกันชื่อยาวเกินหน้ากระดาษ */
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta-tag:not(.meta-user) {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #7C7570;
+  font-weight: 700;
+}
+
+/* ── Card Styling ── */
+.admin-review-card {
+  background: #FFFFFF;
+  border: 1px dashed #1A1714; /* เส้นประตาม Figma */
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .admin-review-company {
   font-family: 'DM Serif Display', serif;
-  font-size: 1.05rem;
-  color: var(--accent);
-  margin-bottom: 4px;
-}
-
-.admin-review-title {
-  font-weight: 600;
-  font-size: .93rem;
-  color: var(--text);
-  margin-bottom: 6px;
+  font-size: 24px;
+  color: #C8502A; /* สีส้ม Tuscany */
+  margin-bottom: 8px;
 }
 
 .admin-review-comment {
-  font-size: .84rem;
-  color: var(--muted);
-  line-height: 1.65;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1A1714;
 }
 
-.admin-reviews-feed {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-top: 8px;
-}
-
-/* Review skeleton */
-.admin-review-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
+/* ── Skeleton & Empty State ── */
 .admin-review-sk-card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  background: #FFFFFF;
+  border: 1px solid #E0DAD4;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 14px;
 }
 
-/* No reviews placeholder */
 .admin-no-reviews {
   text-align: center;
-  padding: 72px 24px;
+  padding: 80px;
   font-family: 'DM Serif Display', serif;
-  font-size: 1.6rem;
-  color: #C4BDB8;
-  letter-spacing: .01em;
-  border-radius: var(--radius);
-  margin-top: 8px;
+  font-size: 1.8rem;
+  color: #E0DAD4;
+}
+
+/* ส่วนควบคุมด้านขวา (Stars + Delete) */
+.admin-review-actions {
+  /* Auto layout จาก Figma */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* เปลี่ยนเป็น center เพื่อให้ปุ่มอยู่กลางดาว */
+  padding: 0px;
+  gap: 10px;
+
+  width: 217px;
+  height: 129px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 2;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* ── ปุ่ม Delete ── */
+.btn-admin-delete {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 5.8px 13.8px;
+  
+  /* ปรับความกว้างตามปุ่มใน Figma (ถ้าใน Figma ระบุ 69.6px หรือ 80px ให้แก้ตรงนี้) */
+  width: 69.6px; 
+  height: 30.6px;
+
+  border: 1px solid #A02020; /* mexican-red */
+  border-radius: 8px;
+  background: transparent;
+  color: #A02020;
+  
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 13.1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-admin-delete:hover {
+  background: #A02020;
+  color: #FFFFFF;
 }
 
 /* Sort row */
