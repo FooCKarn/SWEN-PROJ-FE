@@ -10,6 +10,7 @@ import getCompany   from '@/libs/getCompany';
 import getBookings  from '@/libs/getBookings';
 import getReviews   from '@/libs/getReviews';
 import createReview from '@/libs/createReview';
+import editReview from '@/libs/editReview';
 
 import { useToast } from '@/hooks/useToast';
 import { formatDate } from '@/utils/dateFormat';
@@ -133,10 +134,17 @@ export default function CompanyProfilePage() {
     setSubmitting(true);
     try {
       const token = localStorage.getItem('jf_token') || '';
+      if (userReview) {
+      // ✏️ กรณีแก้ไข: ใช้ editReview lib
+      await editReview(token, userReview._id, rating, comment);
+      showToast('✅ Review updated!', 'success');
+    } else {
+      // 🆕 กรณีสร้างใหม่: ใช้ createReview lib
       await createReview(token, companyId, rating, comment);
+      showToast('✅ Review published!', 'success');
+    }
       await loadReviews();
       await loadCompany();
-      showToast('✅ Review published!', 'success');
       setShowModal(false);
     } catch (err: unknown) {
       showToast(`❌ ${err instanceof Error ? err.message : 'Failed to save review'}`, 'error');
