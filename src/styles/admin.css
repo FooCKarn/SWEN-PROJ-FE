@@ -189,6 +189,202 @@
   border-color: var(--accent);
 }
 
+/* ── Review Monitor ── */
+.review-monitor-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.review-monitor-controls .search-bar {
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: 0;
+}
+
+.btn-select-company {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  background: var(--text);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .88rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .2s, transform .15s;
+}
+.btn-select-company:hover {
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* Company picker modal */
+.company-picker-list {
+  max-height: 340px;
+  overflow-y: auto;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.company-picker-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: all .18s;
+  text-align: left;
+  width: 100%;
+}
+.company-picker-item:hover {
+  border-color: var(--accent);
+  background: #FFF8F5;
+}
+.company-picker-item.active {
+  border-color: var(--accent);
+  background: #FFF0EC;
+  color: var(--accent);
+}
+
+.company-picker-check {
+  font-size: .9rem;
+  flex-shrink: 0;
+}
+
+/* Active company badge */
+.active-company-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #FFF0EC;
+  border: 1.5px solid var(--accent);
+  border-radius: 20px;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+.badge-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: .85rem;
+  color: var(--accent);
+  padding: 0;
+  line-height: 1;
+  opacity: .7;
+  transition: opacity .15s;
+}
+.badge-clear:hover { opacity: 1; }
+
+/* Review list card (admin view – read-only) */
+.admin-review-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  animation: fadeUp .4s ease both;
+}
+
+.admin-review-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-review-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+.admin-review-company {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.admin-review-title {
+  font-weight: 600;
+  font-size: .93rem;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.admin-review-comment {
+  font-size: .84rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.admin-reviews-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+/* Review skeleton */
+.admin-review-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.admin-review-sk-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* No reviews placeholder */
+.admin-no-reviews {
+  text-align: center;
+  padding: 72px 24px;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  color: #C4BDB8;
+  letter-spacing: .01em;
+  border-radius: var(--radius);
+  margin-top: 8px;
+}
+
+/* Sort row */
+.review-sort-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
 /* ── Responsive */
 @media (max-width: 768px) {
   .admin-header { flex-direction: column; }
