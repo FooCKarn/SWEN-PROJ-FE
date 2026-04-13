@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 
 import ReviewModal from '@/components/modals/ReviewModal';
+import DeleteReviewModal from '@/components/modals/DeleteReviewModal';
 import Toast from '@/components/Toast';
 
 import getCompany   from '@/libs/getCompany';
@@ -20,6 +21,7 @@ import '@/styles/companyProfile.css';
 import '@/styles/review.css';
 import '@/styles/modal.css';
 import '@/styles/bookingList.css';
+import '@/styles/card.css'
 
 const PAGE_SIZE = 5;
 
@@ -153,6 +155,30 @@ export default function CompanyProfilePage() {
     }
   }
 
+  async function handleDeleteReview() {
+    if (!deleteTarget) return;
+    setDeleteLoading(true);
+    try {
+      const token = localStorage.getItem('jf_token') || '';
+      // สมมติว่ามี lib deleteReview หรือใช้ fetch โดยตรง
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/reviews/${deleteTarget._id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!res.ok) throw new Error('Failed to delete review');
+
+      showToast('✅ Review deleted', 'success');
+      setDeleteTarget(null);
+      // โหลดข้อมูลใหม่เพื่ออัปเดต Rating เฉลี่ยและรายการรีวิว
+      await Promise.all([loadReviews(), loadCompany()]);
+    } catch (err: any) {
+      showToast(`❌ ${err.message || 'Error deleting review'}`, 'error');
+    } finally {
+      setDeleteLoading(false);
+    }
+  }
+
 
   // ── Skeleton
   if (loadingPage) return (
@@ -177,7 +203,19 @@ export default function CompanyProfilePage() {
 
   const avgRating   = company.averageRating ?? 0;
   const numReviews  = company.numReviews ?? reviews.length;
-  const visibleRevs = reviews.slice(0, visibleCount);
+  const myReview = reviews.find(r => {
+  const uid = typeof r.user === 'object' ? r.user._id : r.user;
+  return uid === currentUserId;
+});
+
+// สร้าง list ใหม่โดยเอาของตัวเองไว้หน้าสุด และลบของตัวเองออกจาก list เดิมเพื่อไม่ให้ซ้ำ
+const otherReviews = reviews.filter(r => {
+  const uid = typeof r.user === 'object' ? r.user._id : r.user;
+  return uid !== currentUserId;
+});
+
+const sortedReviews = myReview ? [myReview, ...otherReviews] : otherReviews;
+const visibleRevs = sortedReviews.slice(0, visibleCount);
 
   return (
     <div className="company-profile-page">
@@ -220,48 +258,62 @@ export default function CompanyProfilePage() {
       ) : (
         <>
           <div className="reviews-feed">
-            {visibleRevs.map((review, idx) => {
-              const userName = typeof review.user === 'object' ? review.user.name : 'User';
-              const isOwner  = typeof review.user === 'object'
-                ? review.user._id === currentUserId
-                : review.user === currentUserId;
+  {visibleRevs.map((review, idx) => {
+    const userName = typeof review.user === 'object' ? review.user.name : 'User';
+    const isOwner = typeof review.user === 'object'
+      ? review.user._id === currentUserId
+      : review.user === currentUserId;
 
-              return (
-                <div key={review._id} className="review-card"
-                  style={{ animationDelay: `${idx * 0.06}s` }}>
-                  <div className="review-card-top">
-                    <div className="review-card-meta">
-                      <span className="meta-tag meta-user">
-                        <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                          <circle cx="12" cy="7" r="4" />
-                        </svg>
-                        {userName}
-                      </span>
-                      <span className="meta-tag">
-                        <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <rect x="3" y="4" width="18" height="18" rx="2" />
-                          <line x1="16" y1="2" x2="16" y2="6" />
-                          <line x1="8" y1="2" x2="8" y2="6" />
-                          <line x1="3" y1="10" x2="21" y2="10" />
-                        </svg>
-                        {formatDate(review.createdAt)}
-                        <span style={{ marginLeft: 2 }}>✏️</span>
-                      </span>
-                    </div>
-
-                    <div className="review-card-rating">
-                      <StarDisplay rating={review.rating} size={18} />
-                    </div>
-                  </div>
-
-                  <p className="review-card-comment">{review.comment}</p>
-
-                
-                </div>
-              );
-            })}
+    return (
+      <div key={review._id} className="review-card" style={{ animationDelay: `${idx * 0.06}s` }}>
+        <div className="review-card-top">
+          <div className="review-card-meta">
+            <span className="meta-tag meta-user">
+              <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              {userName} {isOwner && "(You)"}
+            </span>
+            <span className="meta-tag">
+              <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              {formatDate(review.createdAt)}
+            </span>
           </div>
+
+          <div className="review-card-rating-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+            <div className="review-card-rating">
+              <StarDisplay rating={review.rating} size={18} />
+            </div>
+            {isOwner && (
+              <div className="review-owner-actions" style={{ marginTop: '8px', display: 'flex', gap: '12px' }}>
+                <button 
+                  className="btn-edit-date"
+                  onClick={() => setShowModal(true)} 
+                >
+                  Edit
+                </button>
+                <button 
+                  className="btn-cancel btn-delete-review"
+                  onClick={() => setDeleteTarget(review)} 
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <p className="review-card-comment">{review.comment}</p>
+      </div>
+    );
+  })}
+</div>
 
           {visibleCount < reviews.length && (
             <button className="load-more-btn" onClick={() => setVisibleCount(c => c + PAGE_SIZE)}>
@@ -280,6 +332,15 @@ export default function CompanyProfilePage() {
           submitting={submitting}
           onConfirm={handleReviewSubmit}
           onClose={() => setShowModal(false)}
+        />
+      )}
+
+      {/* ── Delete Confirmation Modal (ลบ) */}
+      {deleteTarget && (
+        <DeleteReviewModal
+          loading={deleteLoading}
+          onConfirm={handleDeleteReview}
+          onClose={() => setDeleteTarget(null)}
         />
       )}
 
