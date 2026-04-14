@@ -15,10 +15,9 @@ interface ReviewsFeedProps {
 /**
  * Renders the full reviews section:
  * - Empty state when there are no reviews
- * - Paginated list of `ReviewCard` items
+ * - The logged-in user's review is always pinned to the top
+ * - Paginated list of ReviewCard items
  * - "Load More" button
- *
- * The logged-in user's review is always shown first.
  */
 export default function ReviewsFeed({
   reviews,
@@ -29,7 +28,12 @@ export default function ReviewsFeed({
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   if (reviews.length === 0) {
-    return <div className="no-reviews-placeholder">No Reviews Yet ...</div>;
+    return (
+      <div className="no-reviews-placeholder">
+        No Reviews Yet ...
+        <h3>Be the first one to leave a review!!!!!</h3>
+      </div>
+    );
   }
 
   // Pin the current user's review to the top

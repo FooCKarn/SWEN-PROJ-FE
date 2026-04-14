@@ -1,5 +1,35 @@
+'use client';
+
+import { useState } from 'react';
 import { CompanyItem } from '../../interface';
 import StarDisplay from './StarDisplay';
+
+// ── CompanyLogo ──────────────────────────────────────────────────────────────
+// Renders the company image, falling back to an emoji if the URL is absent
+// or the image fails to load.
+interface CompanyLogoProps {
+  src?: string;
+  name: string;
+}
+
+function CompanyLogo({ src, name }: CompanyLogoProps) {
+  const [imgError, setImgError] = useState(false);
+
+  if (!src || imgError) {
+    return <span className="company-logo-placeholder">🏢</span>;
+  }
+
+  return (
+    <img
+      src={src}
+      alt={name}
+      className="company-img"
+      onError={() => setImgError(true)}
+    />
+  );
+}
+
+// ── CompanyHeader ────────────────────────────────────────────────────────────
 
 interface CompanyHeaderProps {
   company: CompanyItem;
@@ -13,8 +43,9 @@ interface CompanyHeaderProps {
 }
 
 /**
- * Top section of the company profile page.
- * Shows the company logo, name, address, description, star rating and action buttons.
+ * Top section of the Company Profile page.
+ * Displays the company logo (with image-error fallback), name, address,
+ * description, star rating summary and action buttons.
  */
 export default function CompanyHeader({
   company,
@@ -30,15 +61,17 @@ export default function CompanyHeader({
     <div className="company-header">
       {/* Logo */}
       <div className="company-logo-box">
-        <span className="company-logo-placeholder">🏢</span>
+        <CompanyLogo src={company.imgSrc} name={company.name} />
       </div>
 
       {/* Info */}
       <div className="company-header-info">
         <h1>{company.name}</h1>
+
         {company.address && (
           <p className="company-header-address">{company.address}</p>
         )}
+
         {company.description && (
           <p className="company-header-desc">{company.description}</p>
         )}
