@@ -7,8 +7,6 @@ import Card        from './Card';
 import EditModal   from './modals/EditModal';
 import CancelModal from './modals/CancelModal';
 import DetailModal from './modals/DetailModal';
-import DeleteReviewModal from './modals/DeleteReviewModal';
-import ReviewModal from './modals/ReviewModal';
 import EmptyState  from './EmptyState';
 import Toast       from './Toast';
 
@@ -16,9 +14,7 @@ import getBookings   from '../libs/getBookings';
 import updateBooking from '../libs/updateBooking';
 import deleteBooking from '../libs/deleteBooking';
 import getReviews    from '../libs/getReviews';
-import deleteReview from '../libs/deleteReview';
-import createReview from '../libs/createReview';
-import editReview   from '../libs/editReview';
+
 
 import { setBookings, removeBooking, updateBookingDate } from '../redux/features/bookSlice';
 import { RootState } from '../redux/store';
@@ -46,12 +42,8 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
 
   // ── Review state: companyId → ReviewItem | null
   const [reviewMap, setReviewMap] = useState<Record<string, ReviewItem | null>>({});
-  const [deleteReviewTarget, setDeleteReviewTarget] = useState<{ booking: BookingItem; review: ReviewItem } | null>(null);
-  const [deleteReviewLoading, setDeleteReviewLoading] = useState(false);
-
+ 
   // ── Review modal state
-  const [reviewModalTarget, setReviewModalTarget] = useState<{ booking: BookingItem; review: ReviewItem | null } | null>(null);
-  const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [currentUserName, setCurrentUserName] = useState('');
 
   useEffect(() => {
@@ -158,52 +150,6 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
     }
   }
 
-  async function confirmDeleteReview() {
-  if (!deleteReviewTarget) return;
-  setDeleteReviewLoading(true);
-  try {
-    const token = localStorage.getItem('jf_token') || '';
-    await deleteReview(token, deleteReviewTarget.review._id);
-    
-    // อัปเดต UI: ลบรีวิวออกจาก Map เพื่อให้หน้าจอกลับมาแสดงปุ่ม "Review Company"
-    setReviewMap(prev => ({ 
-      ...prev, 
-      [deleteReviewTarget.booking.company._id]: null 
-    }));
-    
-    setDeleteReviewTarget(null);
-    showToast('✅ Review deleted.', 'success');
-  } catch (err: unknown) {
-    showToast(`❌ ${err instanceof Error ? err.message : 'Delete failed'}`, 'error');
-  } finally {
-    setDeleteReviewLoading(false);
-  }
-  }
-
-  async function confirmReview(rating: number, comment: string) {
-    if (!reviewModalTarget) return;
-    setReviewSubmitting(true);
-    try {
-      const token = localStorage.getItem('jf_token') || '';
-      const companyId = reviewModalTarget.booking.company._id;
-      if (reviewModalTarget.review) {
-        const res = await editReview(token, reviewModalTarget.review._id, rating, comment);
-        const updated: ReviewItem = Array.isArray(res.data) ? res.data[0] : ({ ...reviewModalTarget.review, rating, comment } as ReviewItem);
-        setReviewMap(prev => ({ ...prev, [companyId]: updated }));
-        showToast('✅ Review updated!', 'success');
-      } else {
-        const created = await createReview(token, companyId, rating, comment);
-        setReviewMap(prev => ({ ...prev, [companyId]: created }));
-        showToast('✅ Review published!', 'success');
-      }
-      setReviewModalTarget(null);
-    } catch (err: unknown) {
-      showToast(`❌ ${err instanceof Error ? err.message : 'Failed to save review'}`, 'error');
-    } finally {
-      setReviewSubmitting(false);
-    }
-  }
-
 
   if (loading) return (
     <div className="bookings-list">
@@ -245,11 +191,7 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
             index={i}
             onEdit={openEditModal}
             onCancel={(b) => setCancelTarget(b)}
-            onDetail={(b) => setDetailTarget(b)}
-            userReview={reviewMap[booking.company?._id ?? ''] ?? null}
-            onDeleteReview={(b, r) => setDeleteReviewTarget({ booking: b, review: r })}
-            onEditReview={(b, r) => setReviewModalTarget({ booking: b, review: r })}
-            onReviewCompany={(b) => setReviewModalTarget({ booking: b, review: null })}
+            onDetail={(b) => setDetailTarget(b)}      
           />
         ))}
       </div>
@@ -281,24 +223,6 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
         />
       )}
 
-      {deleteReviewTarget && (
-      <DeleteReviewModal
-        loading={deleteReviewLoading}
-        onConfirm={confirmDeleteReview}
-        onClose={() => setDeleteReviewTarget(null)}
-      />
-      )}
-
-      {reviewModalTarget && (
-        <ReviewModal
-          userName={currentUserName}
-          bookingDate={reviewModalTarget.booking.bookingDate}
-          existingReview={reviewModalTarget.review}
-          submitting={reviewSubmitting}
-          onConfirm={confirmReview}
-          onClose={() => setReviewModalTarget(null)}
-        />
-      )}
 
       <Toast toast={toast} />
     </>
