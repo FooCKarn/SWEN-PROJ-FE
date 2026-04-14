@@ -64,6 +64,7 @@ export default function ReviewCard({
           <span className="meta-tag">
             <CalendarIcon />
             {formatDate(review.edited ? review.editedAt: review.createdAt)}
+            {review.edited ? " (edited)": ""}
           </span>
         </div>
 
