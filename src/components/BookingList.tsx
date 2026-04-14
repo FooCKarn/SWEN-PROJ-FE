@@ -73,7 +73,7 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
     if (!userId) return;
 
     const pastBookings = bookings.filter(b => b.bookingDate && new Date(b.bookingDate) < new Date());
-    const uniqueCompanyIds = [...new Set(pastBookings.map(b => b.company._id))];
+    const uniqueCompanyIds = [...new Set(pastBookings.filter(b => b.company?._id).map(b => b.company._id))];
 
     uniqueCompanyIds.forEach(async (companyId) => {
       try {
@@ -208,7 +208,7 @@ export default function BookingList({ items }: { items?: BookingItem[] }) {
             onEdit={openEditModal}
             onCancel={(b) => setCancelTarget(b)}
             onDetail={(b) => setDetailTarget(b)}
-            userReview={reviewMap[booking.company._id] ?? null}
+            userReview={reviewMap[booking.company?._id ?? ''] ?? null}
             onDeleteReview={(b, r) => setDeleteReviewTarget({ booking: b, review: r })}
           />
         ))}
