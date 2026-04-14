@@ -37,6 +37,8 @@ function StarIcon({ filled }: { filled: boolean }) {
   );
 }
 
+
+
 function StarDisplay({ rating, size = 20 }: { rating: number; size?: number }) {
   return (
     <div style={{ display: 'inline-flex', gap: 3 }}>
@@ -68,6 +70,20 @@ function StarDisplay({ rating, size = 20 }: { rating: number; size?: number }) {
         );
       })}
     </div>
+  );
+}
+
+//--ImageHandle
+  function CompanyLogo({ src, name }: { src?: string; name: string }) {
+  const [imgError, setImgError] = useState(false);
+  if (!src || imgError) return <span>🏢</span>;
+  return (
+    <img
+      src={src}
+      alt={name}
+      className="company-img"
+      onError={() => setImgError(true)}
+    />
   );
 }
 
@@ -262,8 +278,8 @@ const visibleRevs = sortedReviews.slice(0, visibleCount);
 
       {/* ── Company Header */}
       <div className="company-header">
-        <div className="company-logo-box">
-          <span className="company-logo-placeholder">🏢</span>
+       <div className="company-logo-box">
+          <CompanyLogo src={company.imgSrc} name={company.name} />
         </div>
 
         <div className="company-header-info">
@@ -294,7 +310,9 @@ const visibleRevs = sortedReviews.slice(0, visibleCount);
 
       {/* ── Reviews Feed */}
       {reviews.length === 0 ? (
-        <div className="no-reviews-placeholder">No Reviews Yet ...</div>
+        <div className="no-reviews-placeholder">No Reviews Yet ...
+        <h3>Be the first one to leave a review!!!!!</h3>
+        </div>
       ) : (
         <>
           <div className="reviews-feed">
