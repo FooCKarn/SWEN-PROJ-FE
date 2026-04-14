@@ -8,6 +8,7 @@ interface ReviewsFeedProps {
   reviews: ReviewItem[];
   /** ID of the currently-logged-in user */
   currentUserId: string;
+  currentUserRole: string,
   onEditReview: () => void;
   onDeleteReview: (review: ReviewItem) => void;
 }
@@ -22,6 +23,7 @@ interface ReviewsFeedProps {
 export default function ReviewsFeed({
   reviews,
   currentUserId,
+  currentUserRole,
   onEditReview,
   onDeleteReview,
 }: ReviewsFeedProps) {
@@ -57,6 +59,7 @@ export default function ReviewsFeed({
             review={review}
             index={idx}
             currentUserId={currentUserId}
+            currentUserRole={currentUserRole}
             onEdit={onEditReview}
             onDelete={onDeleteReview}
           />

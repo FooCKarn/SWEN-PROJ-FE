@@ -7,6 +7,7 @@ interface ReviewCardProps {
   index: number;
   /** ID of the currently-logged-in user */
   currentUserId: string;
+  currentUserRole?: string; 
   onEdit: () => void;
   onDelete: (review: ReviewItem) => void;
 }
@@ -40,6 +41,7 @@ export default function ReviewCard({
   review,
   index,
   currentUserId,
+  currentUserRole,
   onEdit,
   onDelete,
 }: ReviewCardProps) {
@@ -48,55 +50,72 @@ export default function ReviewCard({
     typeof review.user === 'object'
       ? review.user._id === currentUserId
       : review.user === currentUserId;
+  const isAdmin = currentUserRole === 'admin';
   console.log(formatDate(review.editedAt || review.createdAt));
   return (
     <div
       className="review-card"
-      style={{ animationDelay: `${index * 0.06}s` }}
+      style={{ 
+        animationDelay: `${index * 0.06}s`,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        gap: '20px'
+      }}
     >
-      <div className="review-card-top">
-        {/* Left: user + date meta */}
-        <div className="review-card-meta">
+      {/* --- ฝั่งซ้าย: ข้อมูล User + วันที่ และ คอมเมนต์อยู่ด้านล่าง --- */}
+      <div style={{ flex: 1 }}>
+        <div className="review-card-meta" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <span className="meta-tag meta-user">
             <UserIcon />
             {userName} {isOwner && '(You)'}
           </span>
           <span className="meta-tag">
             <CalendarIcon />
-            {formatDate(review.edited ? review.editedAt: review.createdAt)}
-            {review.edited ? " (edited)": ""}
+            {formatDate(review.createdAt)}
+		{review.edited ? " (edited)": ""}
           </span>
         </div>
 
-        {/* Right: stars + owner actions */}
-        <div
-          className="review-card-rating-container"
-          style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}
-        >
-          <div className="review-card-rating">
-            <StarDisplay rating={review.rating} size={18} />
-          </div>
+        {/* คอมเมนต์อยู่ล่างชื่อผู้ใช้พอดี */}
+        <p className="review-card-comment" style={{ marginTop: '12px', marginBottom: 0 }}>
+          {review.comment}
+        </p>
+      </div>
 
+      {/* --- ฝั่งขวา: ดาว และ ปุ่มจัดการ (Edit/Delete) อยู่ติดกันด้านบน --- */}
+      <div
+        style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'flex-end', 
+          gap: '8px', 
+          flexShrink: 0 
+        }}
+      >
+        <div className="review-card-rating">
+          <StarDisplay rating={review.rating} size={18} />
+        </div>
+
+        <div className="review-card-actions" style={{ display: 'flex', gap: '8px' }}>
+          {/* เฉพาะเจ้าของถึงจะแก้ได้ */}
           {isOwner && (
-            <div
-              className="review-owner-actions"
-              style={{ marginTop: '8px', display: 'flex', gap: '12px' }}
+            <button className="btn-review-edit" onClick={onEdit}>
+              Edit
+            </button>
+          )}
+          
+          {/* เจ้าของ "หรือ" Admin ถึงจะลบได้ */}
+          {(isOwner || isAdmin) && (
+            <button
+              className="btn-review-delete"
+              onClick={() => onDelete(review)}
             >
-              <button className="btn-edit-date" onClick={onEdit}>
-                Edit
-              </button>
-              <button
-                className="btn-cancel btn-delete-review"
-                onClick={() => onDelete(review)}
-              >
-                Delete
-              </button>
-            </div>
+              Delete
+            </button>
           )}
         </div>
       </div>
-
-      <p className="review-card-comment">{review.comment}</p>
     </div>
   );
 }

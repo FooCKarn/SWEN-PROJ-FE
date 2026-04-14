@@ -46,6 +46,7 @@ export default function CompanyProfilePage() {
   // ── Auth / user state ─────────────────────────────────────────────────────
   const [currentUserId,   setCurrentUserId]   = useState('');
   const [currentUserName, setCurrentUserName] = useState('');
+  const [currentUserRole,   setCurrentUserRole]   = useState('');
   const [userReview,      setUserReview]       = useState<ReviewItem | null>(null);
   const [userBookingDate, setUserBookingDate] = useState('');
 
@@ -89,6 +90,7 @@ export default function CompanyProfilePage() {
         const u = JSON.parse(raw);
         setCurrentUserId(u._id || '');
         setCurrentUserName(u.name || u.email || '');
+        setCurrentUserRole(u.role || '');
       }
     } catch { /* ignore */ }
   }, []);
@@ -209,6 +211,7 @@ export default function CompanyProfilePage() {
       <ReviewsFeed
         reviews={reviews}
         currentUserId={currentUserId}
+        currentUserRole={currentUserRole}
         onEditReview={() => setShowReviewModal(true)}
         onDeleteReview={(review) => setDeleteTarget(review)}
       />
