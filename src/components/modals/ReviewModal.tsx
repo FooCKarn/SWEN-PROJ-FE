@@ -80,7 +80,7 @@ export default function ReviewModal({
           maxLength={100}
           onChange={(e) => { setComment(e.target.value); setError(''); }}
         />
-        <span className="textarea-limit">(limit 100 words)</span>
+        <span className="textarea-limit">(limit 100 characters)</span>
       </div>
 
       {/* Star input */}
