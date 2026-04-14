@@ -73,6 +73,24 @@
 }
 .btn-review-company:hover { border-color: var(--accent); color: var(--accent); }
 
+.review-preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  background: #FFF8ED;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+.review-preview-comment {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
 .btn-delete-review {
   border-color: #C04040 !important;
   color: #C04040 !important;

@@ -77,6 +77,8 @@ export interface CardProps {
   onDetail: (booking: BookingItem) => void;
   userReview?: ReviewItem | null;
   onDeleteReview?: (booking: BookingItem, review: ReviewItem) => void;
+  onEditReview?: (booking: BookingItem, review: ReviewItem) => void;
+  onReviewCompany?: (booking: BookingItem) => void;
 }
 
 export interface DateReserveProps {

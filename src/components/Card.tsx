@@ -5,8 +5,29 @@ import { CardProps } from '../../interface';
 import { formatDate } from '../utils/dateFormat';
 import '@/styles/card.css';
 
-export default function Card({ booking, index, onEdit, onCancel, onDetail, onDeleteReview, userReview }: CardProps) {
-  const router  = useRouter();
+function StarMini({ rating }: { rating: number }) {
+  return (
+    <span style={{ display: 'inline-flex', gap: 1 }}>
+      {[1,2,3,4,5].map(s => {
+        const full = rating >= s;
+        const half = !full && rating >= s - 0.5;
+        const clipId = `card-half-${s}`;
+        return (
+          <svg key={s} width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="#C4BDB8" strokeWidth="1.8">
+            {half && <defs><clipPath id={clipId}><rect x="0" y="0" width="12" height="24" /></clipPath></defs>}
+            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+            {(full || half) && (
+              <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                fill="#E8A020" stroke="#E8A020" clipPath={half ? `url(#${clipId})` : undefined} />
+            )}
+          </svg>
+        );
+      })}
+    </span>
+  );
+}
+
+export default function Card({ booking, index, onEdit, onCancel, onDetail, onDeleteReview, onEditReview, onReviewCompany, userReview }: CardProps) {
   const company = booking.company;
   const website = company?.website || '';
   const websiteHref = website
@@ -14,10 +35,6 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail, onDel
     : '#';
 
   const isPast = booking.bookingDate ? new Date(booking.bookingDate) < new Date() : false;
-
-  function goToCompanyProfile() {
-    router.push(`/company/${company._id}`);
-  }
 
   return (
     <div className="booking-card" style={{ animationDelay: `${index * 0.07}s` }}>
@@ -88,12 +105,18 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail, onDel
           </>
         ) : userReview ? (
           <>
-            <button className="btn-edit-date" onClick={goToCompanyProfile}>✏️ Edit Review</button>
-            <button className="btn-cancel btn-delete-review"
-              onClick={() => onDeleteReview?.(booking, userReview)}>Delete Review</button>
+            <div className="review-preview">
+              <StarMini rating={userReview.rating} />
+              <span className="review-preview-comment">"{userReview.comment}"</span>
+            </div>
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button className="btn-edit-date" onClick={() => onEditReview?.(booking, userReview)}>✏️ Edit Review</button>
+              <button className="btn-cancel btn-delete-review"
+                onClick={() => onDeleteReview?.(booking, userReview)}>Delete Review</button>
+            </div>
           </>
         ) : (
-          <button className="btn-review-company" onClick={goToCompanyProfile}>Review Company</button>
+          <button className="btn-review-company" onClick={() => onReviewCompany?.(booking)}>Review Company</button>
         )}
       </div>
     </div>
