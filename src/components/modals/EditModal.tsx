@@ -35,7 +35,7 @@ export default function EditModal({
           style={{ background: 'var(--text)' }}
           onClick={onConfirm}
           disabled={loading}>
-          {loading ? 'Saving…' : 'Save Changes'}
+          {loading ? <><span className="btn-spinner" />Saving…</> : 'Save Changes'}
         </button>
       </div>
     </ModalWrapper>

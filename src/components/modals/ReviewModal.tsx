@@ -113,7 +113,7 @@ export default function ReviewModal({
           onClick={handleSubmit}
           disabled={submitting}
         >
-          {submitting ? 'Saving…' : (isEdit ? 'Save Changes' : 'Publish')}
+          {submitting ? <><span className="btn-spinner" />Saving…</> : (isEdit ? 'Save Changes' : 'Publish')}
         </button>
       </div>
     </ModalWrapper>

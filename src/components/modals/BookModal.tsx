@@ -64,7 +64,7 @@ export default function BookModal({
             onClick={onConfirm}
             disabled={submitting}>
             {submitting
-              ? (editMode ? 'Saving…' : 'Booking...')
+              ? (editMode ? <><span className="btn-spinner" />Saving…</> : <><span className="btn-spinner" />Booking…</>)
               : (editMode ? 'Save Changes' : 'Confirm Booking')}
           </button>
         </div>

@@ -26,7 +26,7 @@ export default function CancelModal({ target, loading, onConfirm, onClose }: Can
       <div className="modal-actions">
         <button className="btn-modal-cancel" onClick={onClose}>Keep It</button>
         <button className="btn-modal-confirm" onClick={onConfirm} disabled={loading}>
-          {loading ? 'Cancelling…' : 'Yes, Cancel It'}
+          {loading ? <><span className="btn-spinner" />Cancelling…</> : 'Yes, Cancel It'}
         </button>
       </div>
     </ModalWrapper>
