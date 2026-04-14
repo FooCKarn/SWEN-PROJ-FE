@@ -208,18 +208,31 @@ export default function AdminReviewsPage() {
           onChange={setSearch}
           placeholder="Search by Keywords"
         />
-        <button className="btn-select-company" onClick={() => { setPickerOpen(true); setPickerSearch(''); }}>
-          Select Companies
-        </button>
+        {selectedCompany ? (
+          /* ── แสดงปุ่มล่าง (Badge) เมื่อเลือกบริษัทแล้ว ── */
+          <div className="active-company-badge">
+            
+            <button 
+              className="badge-clear" 
+              onClick={() => setSelectedCompany(null)} 
+              title="Clear filter"
+            >
+              🏢 {selectedCompany.name}
+              ✕
+            </button>
+          </div>
+        ) : (
+          /* ── แสดงปุ่มบน เมื่อยังไม่ได้เลือกบริษัท ── */
+          <div className="select-company-container"> {/* ใส่ div ครอบเพื่อให้สไตล์เหมือนเดิมถ้าจำเป็น */}
+            <button 
+              className="btn-select-company" 
+              onClick={() => { setPickerOpen(true); setPickerSearch(''); }}
+            >
+              Select Companies
+            </button>
+          </div>
+        )}
       </div>
-
-      {/* Active company badge */}
-      {selectedCompany && (
-        <div className="active-company-badge">
-          🏢 {selectedCompany.name}
-          <button className="badge-clear" onClick={() => setSelectedCompany(null)} title="Clear filter">✕</button>
-        </div>
-      )}
 
       {/* ── Review list */}
       {loading ? (
