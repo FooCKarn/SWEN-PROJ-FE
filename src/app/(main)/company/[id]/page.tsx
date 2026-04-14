@@ -34,7 +34,7 @@ import '@/styles/card.css';
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function CompanyProfilePage() {
+export default function CompanyProfilePage(isFull:boolean) {
   const params    = useParams();
   const companyId = params.id as string;
 
@@ -203,6 +203,7 @@ export default function CompanyProfilePage() {
         reviewCount={numReviews}
         currentUserId={currentUserId}
         hasUserReview={!!userReview}
+        isFull={isFull}
         onOpenReviewModal={() => setShowReviewModal(true)}
         onOpenBookModal={() => setShowBookModal(true)}
       />
