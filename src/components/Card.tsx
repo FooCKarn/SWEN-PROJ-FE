@@ -8,7 +8,7 @@ import '@/styles/card.css';
 function StarMini({ rating }: { rating: number }) {
   return (
     <span style={{ display: 'inline-flex', gap: 1 }}>
-      {[1,2,3,4,5].map(s => {
+      {[1, 2, 3, 4, 5].map(s => {
         const full = rating >= s;
         const half = !full && rating >= s - 0.5;
         const clipId = `card-half-${s}`;
@@ -33,8 +33,6 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail, onDel
   const websiteHref = website
     ? website.startsWith('http') ? website : `https://${website}`
     : '#';
-
-  const isPast = booking.bookingDate ? new Date(booking.bookingDate) < new Date() : false;
 
   return (
     <div className="booking-card" style={{ animationDelay: `${index * 0.07}s` }}>
@@ -62,7 +60,7 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail, onDel
               </span>
             )}
 
-            <button className="meta-tag meta-date" onClick={() => !isPast && onEdit(booking)}>
+            <button className="meta-tag meta-date" onClick={() => onEdit(booking)}>
               <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <rect x="3" y="4" width="18" height="18" rx="2" />
                 <line x1="16" y1="2" x2="16" y2="6" />
@@ -70,7 +68,7 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail, onDel
                 <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
               {formatDate(booking.bookingDate)}
-              {!isPast && <span className="edit-hint">✏️</span>}
+              <span className="edit-hint">✏️</span>
             </button>
 
             {company?.address && (
@@ -98,22 +96,8 @@ export default function Card({ booking, index, onEdit, onCancel, onDetail, onDel
       </div>
 
       <div className="booking-actions">
-        {!isPast ? (
-          <>
-            <button className="btn-edit-date" onClick={() => onEdit(booking)}>✏️ Edit Date</button>
-            <button className="btn-cancel"    onClick={() => onCancel(booking)}>Cancel</button>
-          </>
-        ) : userReview ? (
-          <>
-            <div style={{ display: 'flex', gap: 6 }}>
-              <button className="btn-edit-date" onClick={() => onEditReview?.(booking, userReview)}>✏️ Edit Review</button>
-              <button className="btn-cancel btn-delete-review"
-                onClick={() => onDeleteReview?.(booking, userReview)}>Delete Review</button>
-            </div>
-          </>
-        ) : (
-          <button className="btn-review-company" onClick={() => onReviewCompany?.(booking)}>Review Company</button>
-        )}
+        <button className="btn-edit-date" onClick={() => onEdit(booking)}>✏️ Edit Date</button>
+        <button className="btn-cancel" onClick={() => onCancel(booking)}>Cancel</button>
       </div>
     </div>
   );

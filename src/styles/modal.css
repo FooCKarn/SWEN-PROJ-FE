@@ -48,7 +48,13 @@
 .btn-modal-confirm:disabled { opacity: .55; pointer-events: none; }
 
 /* ── Button spinner */
-.btn-modal-confirm { display: inline-flex; align-items: center; gap: 8px; }
+.btn-modal-confirm { 
+  display: inline-flex; 
+  align-items: center; 
+  text-align: center;
+  justify-content: center;
+  gap: 8px; 
+}
 .btn-spinner {
   width: 14px; height: 14px;
   border: 2px solid rgba(255,255,255,0.4);
