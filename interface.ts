@@ -30,6 +30,8 @@ export interface ReviewItem {
   company: string | CompanyItem;
   user: { _id: string; name: string } | string;
   createdAt: string;
+  edited: boolean;
+  editedAt: string;
 }
 
 export interface ReviewJson {
