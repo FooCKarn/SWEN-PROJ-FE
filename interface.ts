@@ -32,6 +32,7 @@ export interface ReviewItem {
   createdAt: string;
   edited: boolean;
   editedAt: string;
+  effectiveDate: string;
 }
 
 export interface ReviewJson {

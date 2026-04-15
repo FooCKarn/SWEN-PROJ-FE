@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ReviewItem } from '../../interface';
 import ReviewCard from './ReviewCard';
+import { getEffectiveDate } from '@/utils/dateFormat';
 
 const PAGE_SIZE = 5;
 
@@ -36,15 +37,21 @@ export default function ReviewsFeed({
     );
   }
 
-  // Pin the current user's review to the top
+  // Pin the current user's review to the top; sort rest by effectiveDate desc
   const myReview = reviews.find((r) => {
     const uid = typeof r.user === 'object' ? r.user._id : r.user;
     return uid === currentUserId;
   });
-  const otherReviews = reviews.filter((r) => {
-    const uid = typeof r.user === 'object' ? r.user._id : r.user;
-    return uid !== currentUserId;
-  });
+  const otherReviews = reviews
+    .filter((r) => {
+      const uid = typeof r.user === 'object' ? r.user._id : r.user;
+      return uid !== currentUserId;
+    })
+    .sort((a, b) => {
+      const tA = new Date(getEffectiveDate(a)).getTime();
+      const tB = new Date(getEffectiveDate(b)).getTime();
+      return tB - tA; // newest effective date first
+    });
   const sortedReviews = myReview ? [myReview, ...otherReviews] : otherReviews;
   const visibleReviews = sortedReviews.slice(0, visibleCount);
 

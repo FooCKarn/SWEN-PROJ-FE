@@ -1,3 +1,17 @@
+import { ReviewItem } from '../../interface';
+
+/**
+ * Returns the effective display date for a review:
+ * - editedAt when the review has been edited
+ * - effectiveDate when provided by the backend
+ * - falls back to createdAt
+ */
+export function getEffectiveDate(review: ReviewItem): string {
+  if (review.edited && review.editedAt) return review.editedAt;
+  if (review.effectiveDate) return review.effectiveDate;
+  return review.createdAt;
+}
+
 export function formatDate(iso: string): string {
   if (!iso) return 'TBD';
   try {

@@ -454,6 +454,32 @@
   margin-bottom: 16px;
 }
 
+/* ── Edited badge — used in ReviewCard, MyReviewList, and admin */
+.edited-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  background: #FFF5E6;
+  color: #B85C00;
+  border: 1px solid #F5C98A;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+/* ── Edited-filter active badge */
+.active-edited-badge {
+  background: #FFF5E6;
+  border-color: #F5C98A;
+  color: #B85C00;
+}
+.active-edited-badge .badge-clear {
+  color: #B85C00;
+}
+
 /* ── Responsive */
 @media (max-width: 768px) {
   .admin-header { flex-direction: column; }

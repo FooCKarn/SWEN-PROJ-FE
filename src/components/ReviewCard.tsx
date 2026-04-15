@@ -1,6 +1,6 @@
 import { ReviewItem } from '../../interface';
 import StarDisplay from './StarDisplay';
-import { formatDate } from '@/utils/dateFormat';
+import { formatDate, getEffectiveDate } from '@/utils/dateFormat';
 
 interface ReviewCardProps {
   review: ReviewItem;
@@ -48,7 +48,7 @@ export default function ReviewCard({
     typeof review.user === 'object'
       ? review.user._id === currentUserId
       : review.user === currentUserId;
-  console.log(formatDate(review.editedAt || review.createdAt));
+  const displayDate = getEffectiveDate(review);
   return (
     <div
       className="review-card"
@@ -63,8 +63,8 @@ export default function ReviewCard({
           </span>
           <span className="meta-tag">
             <CalendarIcon />
-            {formatDate(review.edited ? review.editedAt: review.createdAt)}
-            {review.edited ? " (edited)": ""}
+            {formatDate(displayDate)}
+            {review.edited && <span className="edited-badge">✏️ edited</span>}
           </span>
         </div>
 
