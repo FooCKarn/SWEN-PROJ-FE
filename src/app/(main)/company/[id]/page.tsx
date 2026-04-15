@@ -11,6 +11,7 @@ import ReviewModal            from '@/components/modals/ReviewModal';
 import DeleteReviewModal      from '@/components/modals/DeleteReviewModal';
 import BookModal              from '@/components/modals/BookModal';
 import Toast                  from '@/components/Toast';
+import DeleteReviewAdminModal from '@/components/modals/DeleteReviewAdminModal';
 
 // ── Libs / hooks ─────────────────────────────────────────────────────────────
 import getCompany   from '@/libs/getCompany';
@@ -180,6 +181,30 @@ export default function CompanyProfilePage(isFull:boolean) {
     }
   }
 
+  const handleDeleteAdmin = async (reason: string) => {
+    if (!deleteTarget) return;
+    
+    const token = localStorage.getItem('jf_token');
+    if (!token) return;
+
+    setDeleteLoading(true); // ใช้ตัวแปรเดียวกับ DeleteReviewModal ทั่วไป
+    try {
+      // ส่ง token, ID ของรีวิว และเหตุผลในการลบไปยัง lib
+      await deleteReview(token, deleteTarget._id); 
+      
+      // อัปเดต UI ทันที
+      setReviews((prev) => prev.filter((r) => r._id !== deleteTarget._id));
+      showToast('✅ Review deleted by admin', 'success');
+      
+      setDeleteTarget(null); // ปิด Modal
+      await loadCompany();   // อัปเดตจำนวนรีวิวที่ Header
+    } catch (err: unknown) {
+      showToast(`❌ ${err instanceof Error ? err.message : 'Failed to delete review'}`, 'error');
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   // ── Render ────────────────────────────────────────────────────────────────
 
   if (loadingPage) return <CompanyProfileSkeleton />;
@@ -193,6 +218,11 @@ export default function CompanyProfilePage(isFull:boolean) {
   );
 
   const numReviews = company.numReviews ?? reviews.length;
+  const targetOwnerId = typeof deleteTarget?.user === 'object' 
+  ? deleteTarget.user._id 
+  : deleteTarget?.user;
+
+  const isDeletingOwnReview = targetOwnerId === currentUserId;
 
   return (
     <div className="company-profile-page">
@@ -229,7 +259,7 @@ export default function CompanyProfilePage(isFull:boolean) {
         />
       )}
 
-      {deleteTarget && (
+      {deleteTarget && (currentUserRole!="admin" || isDeletingOwnReview) &&(
         <DeleteReviewModal
           loading={deleteLoading}
           onConfirm={handleDeleteReview}
@@ -250,6 +280,16 @@ export default function CompanyProfilePage(isFull:boolean) {
           onClose={() => setShowBookModal(false)}
         />
       )}
+
+      {deleteTarget && currentUserRole=="admin" &&!isDeletingOwnReview&&(
+      <DeleteReviewAdminModal
+          open = {!!deleteTarget}
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={handleDeleteAdmin}
+          loading={deleteLoading}
+        />
+        )
+        }
 
       <Toast toast={toast} />
     </div>
