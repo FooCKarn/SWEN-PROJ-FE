@@ -12,7 +12,7 @@ import EmptyState from '@/components/EmptyState';
 import ModalWrapper from '@/components/ModalWrapper';
 import Toast from '@/components/Toast';
 import { useToast } from '@/hooks/useToast';
-import DeleteReviewAdminModal from '@/components/modals/DeleteReviewAdminModal';
+import DeleteReviewAdminModal from '@/components/modals/review/DeleteReviewAdminModal';
 
 // ── Styles
 import '@/styles/admin.css';

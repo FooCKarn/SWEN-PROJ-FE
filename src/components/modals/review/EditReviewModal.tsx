@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import ModalWrapper from '../ModalWrapper';
-import { ReviewItem } from '../../../interface';
+import ModalWrapper from '../../ModalWrapper';
+import { ReviewItem } from '../../../../interface';
 import '@/styles/review.css';
 
 interface EditReviewModalProps {

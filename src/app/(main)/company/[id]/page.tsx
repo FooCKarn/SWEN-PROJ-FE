@@ -6,11 +6,11 @@ import { useParams } from 'next/navigation';
 // ── Components ───────────────────────────────────────────────────────────────
 import CompanyHeader          from '@/components/CompanyHeader';
 import CompanyProfileSkeleton from '@/components/Companyprofileskeleton';
-import ReviewsFeed            from '@/components/ReviewsFeed';
-import CreateReviewModal      from '@/components/modals/CreateReviewModal';
-import EditReviewModal        from '@/components/modals/EditReviewModal';
-import DeleteReviewModal      from '@/components/modals/DeleteReviewModal';
-import DeleteReviewAdminModal from '@/components/modals/DeleteReviewAdminModal';
+import ReviewsFeed            from '@/components/review/ReviewsFeed';
+import CreateReviewModal      from '@/components/modals/review/CreateReviewModal';
+import EditReviewModal        from '@/components/modals/review/EditReviewModal';
+import DeleteReviewModal      from '@/components/modals/review/DeleteReviewModal';
+import DeleteReviewAdminModal from '@/components/modals/review/DeleteReviewAdminModal';
 import BookModal              from '@/components/modals/BookModal';
 import Toast                  from '@/components/Toast';
 

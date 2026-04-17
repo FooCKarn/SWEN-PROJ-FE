@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ReviewItem } from '../../interface';
+import { ReviewItem } from '../../../interface';
 import ReviewCard from './ReviewCard';
 import { getEffectiveDate } from '@/utils/dateFormat';
 

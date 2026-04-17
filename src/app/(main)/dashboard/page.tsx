@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import Banner        from '@/components/Banner';
 import BookingList   from '@/components/BookingList';
-import MyReviewList  from '@/components/MyReviewList';
+import MyReviewList  from '@/components/review/MyReviewList';
 
 import { RootState } from '@/redux/store';
 

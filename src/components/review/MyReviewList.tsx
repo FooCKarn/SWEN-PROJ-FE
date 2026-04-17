@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { ReviewItem } from '../../interface';
-import getCompanies from '../libs/getCompanies';
-import EditReviewModal from './modals/EditReviewModal';
-import DeleteReviewModal from './modals/DeleteReviewModal';
-import Toast from './Toast';
-import { useReviews } from '../hooks/useReviews';
-import { useToast } from '../hooks/useToast';
+import { ReviewItem } from '../../../interface';
+import getCompanies from '@/libs/getCompanies';
+import EditReviewModal from '@/components/modals/review/EditReviewModal';
+import DeleteReviewModal from '@/components/modals/review/DeleteReviewModal';
+import Toast from '@/components/Toast';
+import { useReviews } from '@/hooks/useReviews';
+import { useToast } from '@/hooks/useToast';
 import { formatDate, getEffectiveDate } from '@/utils/dateFormat';
 
 function StarMini({ rating }: { rating: number }) {

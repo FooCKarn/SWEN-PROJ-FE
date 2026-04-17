@@ -1,6 +1,6 @@
 'use client';
 
-import ModalWrapper from '../ModalWrapper';
+import ModalWrapper from '@/components/ModalWrapper';
 import '@/styles/modal.css';
 
 

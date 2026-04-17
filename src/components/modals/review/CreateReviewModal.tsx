@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import ModalWrapper from '../ModalWrapper';
+import ModalWrapper from '@/components/ModalWrapper';
 import '@/styles/review.css';
 
 interface CreateReviewModalProps {

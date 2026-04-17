@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { CompanyItem } from '../../interface';
-import StarDisplay from './StarDisplay';
+import StarDisplay from './review/StarDisplay';
 
 // ── CompanyLogo ──────────────────────────────────────────────────────────────
 // Renders the company image, falling back to an emoji if the URL is absent
