@@ -119,6 +119,24 @@ export interface SearchBarProps {
   placeholder?: string;
 }
 
+// ─────────────────────────────────────────
+//  Blog
+// ─────────────────────────────────────────
+
+export interface BlogPost {
+  _id: string;
+  title: string;
+  content: string;
+  author: string;
+  createdAt: string;
+}
+
+export interface BlogPostJson {
+  success: boolean;
+  count?: number;
+  data: BlogPost[];
+}
+
 export interface BookModalProps {
   company:      CompanyItem;
   editMode:     boolean;
