@@ -38,7 +38,7 @@ export default function DeleteReviewAdminModal({
 
   return (
     <ModalWrapper open={open} onClose={onClose}>
-      <div className="delete-review-popup" >
+      <div>
         <div className="modal-icon">🗑️</div>
         <h3>Delete Review</h3>
         <p className="modal-sub">
