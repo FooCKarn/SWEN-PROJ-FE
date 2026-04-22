@@ -242,6 +242,14 @@
   background-clip: padding-box;
 }
 
+.post-comment-total {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #E8530A;
+  margin: 0 0 8px;
+  padding: 0 2px;
+}
+
 .post-comment-item {
   border: 1.5px solid #1A1714;
   border-radius: 12px;
