@@ -96,54 +96,21 @@ export default function PostCard({ post, currentUserId, currentUserName, index, 
 
       <hr className="post-detail-divider" />
 
-      {/* Total comment count */}
-      <p className="post-comment-count" style={{ fontSize: '0.85rem', color: '#888', margin: '6px 0' }}>
-         {comments.length} {comments.length === 1 ? 'Comment' : 'Comments'}
-      </p>
-
-      {/* Comment list - เพิ่มสไตล์เลื่อนได้ตรงนี้ */}
+      {/* Comment list */}
       {comments.length > 0 && (
-<<<<<<< HEAD
         <div className="post-comment-list">
           <p className="post-comment-total">Total Comments: {comments.length}</p>
-          {[...comments].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((c) => (
-            <div key={c._id} className="post-comment-item">
-              <p className="post-comment-author">{c.author === currentUserId ? currentUserName : 'Anonymous'}</p>
-              <p className="post-comment-text">{c.text}</p>
-            </div>
-          ))}
-||||||| 585a9ff
-        <div className="post-comment-list">
-          {comments.map((c, i) => (
-            <div key={c._id} className="post-comment-item">
-              <p className="post-comment-author">comment {i + 1} : {c.author === currentUserId ? currentUserName : 'Anonymous'}</p>
-              <p className="post-comment-text">{c.text}</p>
-            </div>
-          ))}
-=======
-        <div className="post-comment-list" style={{ 
-          maxHeight: '150px', 
-          overflowY: 'auto', 
-          margin: '10px 0',
-          paddingRight: '5px'
-        }}>
-          {comments.map((c, i) => {
-            // ── Logic แสดงชื่อ ──
-            // เช็คว่า c.author เป็นก้อน Object ที่มี name ไหม (กรณี Populate มาจาก Backend)
+          {[...comments].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((c) => {
             const authorName = (typeof c.author === 'object' && c.author !== null)
-              ? (c.author as any).name 
+              ? (c.author as { name?: string }).name || 'Anonymous'
               : (c.author === currentUserId ? currentUserName : 'Anonymous');
-
             return (
               <div key={c._id} className="post-comment-item">
-                <p className="post-comment-author">
-                  comment {i + 1} : {authorName}
-                </p>
+                <p className="post-comment-author">{authorName}</p>
                 <p className="post-comment-text">{c.text}</p>
               </div>
             );
           })}
->>>>>>> fed64e6d991e096a280e703dde7638f9745a1fb5
         </div>
       )}
 
