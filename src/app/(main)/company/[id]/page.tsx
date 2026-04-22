@@ -62,10 +62,13 @@ export default function CompanyProfilePage() {
 
   const {
     isFull,
+    bookingMap,
     loadData, // ใช้สำหรับรีเฟรชสถานะการจอง (isFull)
     bookDate, setBookDate,
     bookTime, setBookTime
   } = useBookCompany();
+
+  const isAlreadyBooked = !!bookingMap[companyId];
 
   // ── Data loaders ──────────────────────────────────────────────────────────
   const loadCompany = useCallback(async () => {
@@ -159,6 +162,7 @@ export default function CompanyProfilePage() {
         currentUserId={userInfo.id}
         hasUserReview={!!userReview}
         isFull={isFull} // ค่านี้จะกลายเป็น true ทันทีหลังจบ loadData() ใน handleBookSubmit
+        isAlreadyBooked={isAlreadyBooked}
         onOpenReviewModal={() => userReview ? setEditTarget(userReview) : setShowCreateModal(true)}
         onOpenBookModal={handleOpenBookModal}
       />
@@ -197,7 +201,10 @@ export default function CompanyProfilePage() {
           existingReview={editTarget}
           submitting={reviewSubmitting}
           onConfirm={async (rating, comment) => {
-            await handleUpdate(rating, comment);
+            const success = await handleUpdate(rating, comment);
+             if (success) {
+              loadCompany(); 
+            }
           }}
           onClose={() => setEditTarget(null)}
         />
@@ -209,7 +216,14 @@ export default function CompanyProfilePage() {
           {((typeof deleteTarget.user === 'object' ? deleteTarget.user._id : deleteTarget.user) === userInfo.id) ? (
             <DeleteReviewModal
               loading={reviewSubmitting}
-              onConfirm={handleConfirmDelete}
+              onConfirm={
+                async () => {
+                const success = await handleConfirmDelete();
+                if (success) {
+                loadCompany(); 
+                }
+              }
+              }
               onClose={() => setDeleteTarget(null)}
             />
           ) : (
