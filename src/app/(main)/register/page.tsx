@@ -60,6 +60,8 @@ export default function RegisterPage() {
 
     try {
       const data = await userRegister(name, email, phone, password);
+      // เก็บ token ใน cookie เพื่อให้ middleware อ่านได้
+      document.cookie = `jf_token=${data.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
       localStorage.setItem('jf_token', data.token);
       const me = await getMe(data.token);
       localStorage.setItem('jf_user', JSON.stringify(me.data));
