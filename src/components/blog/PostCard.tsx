@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { BlogPost, BlogComment } from '../../../interface';
 import createComment from '@/libs/createComment';
 import getComments from '@/libs/getComments';
@@ -74,6 +75,22 @@ export default function PostCard({ post, currentUserId, currentUserName, index, 
 
   return (
     <div className="post-card" style={{ animationDelay: `${index * 0.06}s` }}>
+      {/* Edit & Delete buttons — top right corner, visible only to owner */}
+      {isOwner && (
+        <div className="post-card-actions">
+          <Link href={`/blog/${post._id}/edit`} className="btn-post-edit">
+            edit
+          </Link>
+          <button
+            className="btn-post-delete"
+            onClick={() => onDelete(post)}
+            aria-label="Delete this post"
+          >
+            delete
+          </button>
+        </div>
+      )}
+
       {/* Author + date row */}
       <div className="post-card-meta-row">
         <div className="post-card-meta-left">
