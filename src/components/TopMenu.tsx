@@ -22,6 +22,8 @@ export default function TopMenu({ userName, isFull, backToDashboard }: TopMenuPr
   }, []);
 
   function handleLogout() {
+    // ล้าง cookie jf_token
+    document.cookie = 'jf_token=; path=/; max-age=0; SameSite=Lax';
     localStorage.removeItem('jf_token');
     localStorage.removeItem('jf_user');
     router.push('/login');

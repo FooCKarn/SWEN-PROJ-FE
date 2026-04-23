@@ -9,6 +9,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    // middleware จัดการ redirect ไป /login แล้วถ้าไม่มี token
+    // layout นี้เช็คเฉพาะ role admin เท่านั้น
     const token = localStorage.getItem('jf_token');
     if (!token) { router.replace('/login'); return; }
 
@@ -21,6 +23,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }
       })
       .catch(() => {
+        // token หมดอายุ — ล้าง cookie ด้วย
+        document.cookie = 'jf_token=; path=/; max-age=0; SameSite=Lax';
+        localStorage.removeItem('jf_token');
+        localStorage.removeItem('jf_user');
         router.replace('/login');
       });
   }, [router]);

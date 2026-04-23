@@ -107,16 +107,6 @@
 .toast.success { background: #2D7A47; }
 .toast.error   { background: #A02020; }
 
-.modal.delete-review-popup {
-  width: 400px !important;
-  max-width: 400px !important;
-  height: 280px !important;
-  padding: 0 !important; /* ล้าง Padding ของ .modal เดิมทิ้ง เพราะเรามี padding ในตัว popup แล้ว */
-  background: none !important; /* ล้างพื้นหลังเดิม */
-  box-shadow: none !important; /* ล้างเงาเดิม */
-  overflow: visible;
-}
-
 .delete-review-popup {
   display: flex;
   flex-direction: column;

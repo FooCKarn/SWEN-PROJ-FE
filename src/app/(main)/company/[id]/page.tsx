@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 // ── Components ───────────────────────────────────────────────────────────────
 import CompanyHeader          from '@/components/CompanyHeader';
@@ -32,8 +32,11 @@ import '@/styles/modal.css';
 import '@/styles/bookingList.css';
 import '@/styles/card.css';
 
+
+
 export default function CompanyProfilePage() {
   const params    = useParams();
+  const router = useRouter();
   const companyId = params.id as string;
 
   // ── Data state ────────────────────────────────────────────────────────────
@@ -187,6 +190,7 @@ export default function CompanyProfilePage() {
             if (success) {
               setShowCreateModal(false);
               loadCompany(); 
+              
             }
           }}
           onClose={() => setShowCreateModal(false)}
@@ -201,7 +205,12 @@ export default function CompanyProfilePage() {
           existingReview={editTarget}
           submitting={reviewSubmitting}
           onConfirm={async (rating, comment) => {
-            await handleUpdate(rating, comment);
+            const success = await handleUpdate(rating, comment);
+             if (success) {
+              
+              loadCompany();
+
+            }
           }}
           onClose={() => setEditTarget(null)}
         />
@@ -213,7 +222,14 @@ export default function CompanyProfilePage() {
           {((typeof deleteTarget.user === 'object' ? deleteTarget.user._id : deleteTarget.user) === userInfo.id) ? (
             <DeleteReviewModal
               loading={reviewSubmitting}
-              onConfirm={handleConfirmDelete}
+              onConfirm={
+                async () => {
+                const success = await handleConfirmDelete();
+                if (success) {
+                loadCompany(); 
+                }
+              }
+              }
               onClose={() => setDeleteTarget(null)}
             />
           ) : (

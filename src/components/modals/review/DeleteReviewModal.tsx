@@ -12,7 +12,7 @@ interface DeleteReviewModalProps {
 export default function DeleteReviewModal({ loading, onConfirm, onClose }: DeleteReviewModalProps) {
   return (
     <ModalWrapper open onClose={onClose}>
-      <div className="delete-review-popup">
+      <div >
         <div className="modal-icon">🗑️</div>
 
         {/* Delete Review? */}

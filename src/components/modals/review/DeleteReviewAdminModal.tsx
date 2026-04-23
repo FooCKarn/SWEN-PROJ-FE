@@ -19,12 +19,16 @@ export default function DeleteReviewAdminModal({
   loading = false,
 }: Props) {
   const [reason, setReason] = useState('');
+  const [otherText, setOtherText] = useState('');
   const [error, setError] = useState(false);
+  const [otherError, setOtherError] = useState(false);
 
   useEffect(() => {
   if (open) {
     setReason('');
+    setOtherText('');
     setError(false);
+    setOtherError(false);
   }
 }, [open]);
 
@@ -33,12 +37,17 @@ export default function DeleteReviewAdminModal({
       setError(true);
       return;
     }
-    onConfirm(reason);
+    if (reason === 'other' && !otherText.trim()) {
+      setOtherError(true);
+      return;
+    }
+    const finalReason = reason === 'other' ? `Other: ${otherText.trim()}` : reason;
+    onConfirm(finalReason);
   };
 
   return (
     <ModalWrapper open={open} onClose={onClose}>
-      <div className="delete-review-popup" >
+      <div>
         <div className="modal-icon">🗑️</div>
         <h3>Delete Review</h3>
         <p className="modal-sub">
@@ -67,6 +76,28 @@ export default function DeleteReviewAdminModal({
           <p style={{ color: 'red', fontSize: '0.85rem', marginTop: 6 }}>
             This field is required
           </p>
+        )}
+
+        {reason === 'other' && (
+          <>
+            <input
+              type="text"
+              className={`admin-date-input${otherError ? ' error' : ''}`}
+              style={{ width: '100%', marginTop: 10, boxSizing: 'border-box' }}
+              placeholder="Please specify..."
+              value={otherText}
+              maxLength={200}
+              onChange={(e) => {
+                setOtherText(e.target.value);
+                setOtherError(false);
+              }}
+            />
+            {otherError && (
+              <p style={{ color: 'red', fontSize: '0.85rem', marginTop: 6 }}>
+                Please specify the reason
+              </p>
+            )}
+          </>
         )}
 
         <div className="modal-actions" style={{ marginTop: 20 }}>
