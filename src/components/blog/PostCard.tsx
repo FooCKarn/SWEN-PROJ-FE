@@ -93,7 +93,6 @@ export default function PostCard({
         </div>
       )}
 
-      {/* Author + date row */}
       <div className="post-card-meta-row">
         <div className="post-card-meta-left">
           <span className="create-post-author">{displayName}</span>
@@ -107,6 +106,27 @@ export default function PostCard({
 
       <hr className="post-detail-divider" />
 
+      <div className="post-comment-list">
+        <p className="post-comment-total">Total Comments: {comments.length}</p>
+        {comments.map((c) => {
+          // ป้องกัน error c.author is possibly null
+          const authorObj = (typeof c.author === 'object' && c.author !== null) ? (c.author as any) : null;
+          const commentAuthorId = authorObj ? authorObj._id : (typeof c.author === 'string' ? c.author : '');
+          const authorName = authorObj ? authorObj.name : 'User';
+          const isMe = currentUserId && commentAuthorId === currentUserId;
+
+          return (
+            <div key={c._id} className="post-comment-item">
+              <div className="comment-header">
+                <p className="post-comment-author">
+                  {authorName} {isMe && <span className="post-comment-you">(You)</span>}
+                </p>
+                {isMe && (
+                  <div className="comment-actions">
+                    <button className="btn-comment-edit" onClick={() => onEditComment(c)}>Edit</button>
+                    <button className="btn-comment-delete" onClick={() => onDeleteComment(c)}>Delete</button>
+                  </div>
+                )}
       {/* Comment list */}
       <div className="post-comment-list">
         <p className="post-comment-total">Total Comments: {comments.length}</p>
@@ -144,7 +164,6 @@ export default function PostCard({
         })}
       </div>
 
-      {/* Comment input */}
       <div className="post-comment-box">
         <input
           className="post-comment-input"
@@ -153,11 +172,7 @@ export default function PostCard({
           onChange={e => setComment(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSendComment()}
         />
-        <button
-          className="post-comment-send"
-          onClick={handleSendComment}
-          disabled={sending || !comment.trim()}
-        >
+        <button className="post-comment-send" onClick={handleSendComment} disabled={sending || !comment.trim()}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="22" y1="2" x2="11" y2="13" />
             <polygon points="22 2 15 22 11 13 2 9 22 2" />
