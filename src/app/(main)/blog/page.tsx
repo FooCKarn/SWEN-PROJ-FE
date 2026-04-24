@@ -157,6 +157,7 @@ export default function BlogPage() {
               post={post}
               currentUserId={currentUserId}
               currentUserName={currentUserName}
+              currentUserRole={currentUserRole}
               index={idx}
               onDelete={setDeleteTarget}
             />
