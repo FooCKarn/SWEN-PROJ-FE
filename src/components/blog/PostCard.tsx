@@ -44,7 +44,7 @@ export default function PostCard({
     getComments(post._id).then(res => {
       const rawComments = res.data || [];
       const sorted = [...rawComments].sort((a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       setComments(sorted);
     });

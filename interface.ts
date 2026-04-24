@@ -129,6 +129,7 @@ export interface BlogPost {
   content: string;
   author: { _id: string; name: string } | string;
   createdAt: string;
+  comments?: BlogComment[];
 }
 
 export interface BlogPostJson {
